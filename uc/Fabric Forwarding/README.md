@@ -1,10 +1,10 @@
 # Fabric Forwarding
 
-  This contrail usecase helps Overlay workloads(VM/Pods) part of Virtual-network to communicate with Underlay network nodes/resources without using SDN-Gateway(MX). Once enabled on VN, it works by leaking the VN routes into Fabric default routing table. As also advertized through BGP and so traffic works across multiple Vrouter nodes in the cluster. As lookup and forwarding done at Fabric Default routing table, so there is **no** Overlay MPLS tunnels etc and works by simple IP based forwading.
+  This contrail usecase helps Overlay workloads(VM/Pods) part of Virtual-network to communicate with Underlay network nodes/resources without using SDN-Gateway(MX). Once enabled on VN, it works by leaking the VN routes into Fabric default routing table. As also advertized through BGP and so this traffic also works across multiple Vrouter/compute nodes in the cluster. As lookup and forwarding done at Fabric Default routing table, so there is **no** Overlay MPLS tunnels etc and works by simple IP based forwading.
   
-  Incase of Contrail/K8S solution, this can also be used as alternative to policies to enable reachability across multiple Custom VN workloads and Isolated Namespace workloads by enabling "Fabric Forwarding" on them.
+  Incase of Contrail Openshift/K8S solution, this can also be used to enable reachability across multiple Custom VN workloads and Isolated Namespace workloads by enabling "Fabric Forwarding" on them as they don't allow such communication by default.
   
-  Below highlights the Fabric forwarding scenario involving Custom VN workloads and its implementations demonstrated with reference to outputs captured from Control Node introspects and Vrouter-agent routing-tables,
+  Below highlights the Fabric forwarding scenario involving Custom VN workloads and its implementation demonstrated with reference to outputs captured from Control Node introspects and Vrouter-agent routing-tables,
   
   ```
   [root@helper ocp4]# oc get pods -o wide
@@ -27,7 +27,7 @@ worker2.ocp4.example.com   Ready    worker   3d7h    v1.19.0+b00ba52   192.168.7
   
 ### Before enabling "Fabric Forwarding" on VN
   
-   In this example, as shown above command outputs of openshift pods/nodes, ubuntu-custom-a-1 launched on customnetworkA virtual-network on worker2 vrouter and ubuntu-custom-b-1 launched on customnetworkB virtual-network on worker0 vrouter. As we know, above launched workloads by default cannot reach Underlay nodes/resources and also as each of the above workloads being part of different VN and they neither reach each other by default as shown below ping tests,
+   In this example, as shown above CLI outputs of openshift pods/nodes, ***ubuntu-custom-a-1*** launched on ***customnetworkA*** virtual-network on ***worker2*** vrouter and ***ubuntu-custom-b-1*** launched on ***customnetworkB*** virtual-network on ***worker0*** vrouter. As we know, above launched workloads by default cannot reach Underlay nodes/resources and also as each of the above workloads being part of different VN and they neither reach each other by default as shown below ping tests,
   
   ```
   root@ubuntu-custom-a-1:/# 
@@ -49,17 +49,17 @@ root@ubuntu-custom-a-1:/#
   
 ### After enabling "Fabric Forwarding" on VN
 
-  Let us enable Fabric Forwarding on VN using Contrail UI.  Below shows example for CustomNetworkA VN and same to be repeated for CustomNetworkB VN.
+  Let us enable Fabric Forwarding on VN using Contrail UI.  Below shows example for CustomNetworkA VN and same steps to be repeated for CustomNetworkB VN.
   
   ![enable](UI_enable_FF.png)
   
   **Control Node Introspect**
   
-  At this point, we could observe the routes are indeed leaked into Fabric Default routing-table as we enabled Fabric forwarding on CustomNetworkA VN. Below Control Node introspect shows it. Below shows example for CustomNetworkA VN and same to be repeated for CustomNetworkB VN.
+  At this point, we could observe the routes are indeed leaked into Fabric Default routing-table as we enabled Fabric forwarding on CustomNetworkA VN. Below Control Node introspect prooves it. Below given outputs for CustomNetworkA VN and same can be verified for CustomNetworkB VN.
   
   ![FabricRT](CN_introspect_FabricRT.png)
   
-  **Also Vrouter nodes in the cluster can be seen having leaked-routes installed on Fabric Default routing table for this customNetworkA and customNetworkB VN's as we enabled on them**
+  **Also Vrouter nodes in the cluster can be seen having leaked-routes installed on Fabric Default routing table for this customNetworkA and customNetworkB VN's as we enabled on both of them**
   
   ```
   (contrail-tools)[root@worker2 /]$ rt --dump 0 --family inet | grep -v " \+T \+-"
@@ -100,13 +100,13 @@ Destination           PPL        Flags        Label         Nexthop    Stitched 
 
   ```
   
-  At this point, we have Control Plane & routes converged, but still ubuntu-custom-a-1 traffic failure reaching neither Underlay nodes nor ubuntu-custom-b-2 because we need to configure policy to force traffic from customnetworkA VN to Fabric default routing-table for lookup & forwarding. So, below shows how to configure & enable Policy. Below shows example for CustomNetworkA VN and same to be repeated for CustomNetworkB VN.
+  At this point, we have Control Plane & routes converged, but still ***ubuntu-custom-a-1*** traffic failure reaching neither ***Underlay nodes(192.168.7.x)*** nor ***ubuntu-custom-b-2*** because we need to configure policy to force traffic from customnetworkA VN to Fabric default routing-table for lookup & forwarding. So, below shows how to configure & enable Policy. Below given example for CustomNetworkA VN and same to be repeated for CustomNetworkB VN.
   
   ![vn2fabric](VN2Fabric_policy.png)
   
   ![applyVN](a2f_applyVN.png)
   
-  At this point, we are now ready to see ubuntu-custom-a-1 pod traffic success reaching both Underlay nodes and also ubuntu-custom-b-2 pod ( assuming all the earlier example steps also repeated for CustomNetworkB VN ).  Below shows Traffic success to both Underlay and other customVN,
+  At this point, we are now ready to see ***ubuntu-custom-a-1*** pod traffic success reaching both ***Underlay nodes*** and also ***ubuntu-custom-b-2*** pod ( assuming all the earlier example steps also repeated for CustomNetworkB VN ).  Below shows Traffic success to both Underlay and other customVN,
   
   ```
   root@ubuntu-custom-a-1:/# 
