@@ -131,7 +131,7 @@ rtt min/avg/max/mdev = 0.630/1.188/1.747/0.559 ms
 root@ubuntu-custom-a-1:/# 
   ```
   
-  ** Now further vrouter flow tables and NH tables and VIF can proove clearly the traffic takes simple IP forwarding without any MPLS Overlay tunnels etc **
+  **Now further vrouter flow tables and NH tables and VIF can proove clearly the traffic takes simple IP forwarding without any MPLS Overlay tunnels etc**
   
   ```
   (contrail-tools)[root@worker2 /]$ flow -l --match 115.115.115.4 
@@ -230,17 +230,4 @@ vif0/0      OS: ens3 NH: 4
 
 (contrail-tools)[root@worker2 /]$ 
   '''
-  
-  
-  
-
-
-
-  
-  
-  
-  
-  
-
-  
   
