@@ -58,12 +58,15 @@ ssh -i .ssh/helper_rsa -L 34002:127.0.0.1:8085 core@192.168.7.12
 
 ### OCP UI :    ( kubeadmin / password which shown immediately after the installation complete... )
 ###needs laptop /etc/hosts with below,
+````
 192.168.7.77 console-openshift-console.apps.ocp4.example.com oauth-openshift.apps.ocp4.example.com
 192.168.7.77 prometheus-k8s-openshift-monitoring.apps.ocp4.example.com oauth-openshift.apps.ocp4.example.com
-~
+````
 
 
 ###and tunnel ssh to below,
+````
 ssh -l root 10.87.64.153 -D 1080
 
 **now OC UI should work::  https://console-openshift-console.apps.ocp4.example.com/dashboards
+````
