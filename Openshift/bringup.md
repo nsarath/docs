@@ -1,4 +1,4 @@
-## <span style="color:blue"> CN2-5404 : CN2_OCP : Jdeployer to take Vrouter-gateway addressa and use it during provisioning
+# <span style="color:blue"> CN2-5404 : CN2_OCP : Jdeployer to take Vrouter-gateway addressa and use it during provisioning
 
    This issue only applicable if using Multi-interface like Primary and Secondary subnets for Openshift VRRP deployment
    and only seen when using "Lab team" issued subnets for both Primary & Secondary.
@@ -40,9 +40,8 @@ kubectl delete pod -n contrail contrail-vrouter-nodes-bddc
 
 #### now it can be easily verified with the initial command given to check whether showing SDN gw for all vrouters
 
-
-
-## <span style="color:blue"> Contour ingress controller not coming up
+***
+# <span style="color:blue"> Contour ingress controller not coming up</span>
 
 This issue happens due to Port conflict "80" which used by 3rd party Contour and also Redhat Openshift built-in ha-proxy
 So, the way to solve this is to use different port number for Contour in it's Yaml as below by changing to port "89"
