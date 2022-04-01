@@ -69,4 +69,31 @@ ssh -i .ssh/helper_rsa -L 34002:127.0.0.1:8085 core@192.168.7.12
 ssh -l root 10.87.64.153 -D 1080
 
 **now OC UI should work::  https://console-openshift-console.apps.ocp4.example.com/dashboards
+
+** Firefox browser supports FoxyProxy which to be setup for SOCKS4 / 127.0.0.1 / 1080 
 ````
+
+### simple default http server
+````
+Instead of Wget, use CURL with ubuntu Image				
+	After POD up,    "sudo apt-get update". And "sudo apt-get install curl"			
+curl -s "http://172.30.8.164:80/?[1-100000]"				
+time curl -s "http://yourapp.com/page{1, 2}.php?[1-1000]"				>> Stress multiple consecutive/parallel calls and show Performance
+apt-get update; apt-get install tcpdump				
+python2 -m SimpleHTTPServer 80 &		>> to start the HTTP server		
+				
+Traffic				
+Virtual Ixia				
+Ixia. ((. Statefull sessions  many with  One of client/server being Ixia )				
+IPERF				
+other load tool of arch.doc		
+````
+
+### SSD disk and speed disk-access test
+
+cat /sys/block/sda/queue/rotational
+
+dd if=/dev/zero of=/var/test1 bs=2M count=400 oflag=direct
+
+`confirm the correct disk become Primary bootable`
+lsblk
