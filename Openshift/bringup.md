@@ -44,7 +44,8 @@ kubectl delete pod -n contrail contrail-vrouter-nodes-bddc
 # <span style="color:blue"> Contour ingress controller not coming up</span>
 
 This issue happens due to Port conflict "80" which used by 3rd party Contour and also Redhat Openshift built-in ha-proxy
-So, the way to solve this is to use different port number for Contour in it's Yaml as below by changing to port "89"
+So, when this issue happen, the envoy pods not come up and the way to solve this is to use different port number for 
+Contour in it's Yaml as below by changing to port "89"
 
 ````
 ::
