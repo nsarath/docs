@@ -1,4 +1,4 @@
-# loading Private image without re-deploying the setup
+# Loading Private image without re-deploying the setup
     
 We cannot rely on the procedure like ‘stop/modifycontainer/start’ on any k8s based setups
  (no matter ocp or vanilla k8s). This is because all containers are managed by k8s and in case of container is stopped
