@@ -269,4 +269,9 @@ kubectl get ingress -n isl-np-web-profile-w-haproxy-ingress-0000003 ingress-0000
 #
 #
 
+## Ha-proxy ( Profile_1_b )
+root@ocp_ext_vm:~# curl http://10.87.96.132:30316/frontend-0000003-80          
+frontend-0000003-f68c9d645-bf98j
+root@ocp_ext_vm:~# 
+
 ```
